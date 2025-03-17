@@ -5150,11 +5150,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PanelPurchase
       objectReference: {fileID: 0}
-    - target: {fileID: 8031432048777736216, guid: 665b17638f11b744aaa66153ad6c6933,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8031432048777736219, guid: 665b17638f11b744aaa66153ad6c6933,
         type: 3}
       propertyPath: m_Pivot.x
