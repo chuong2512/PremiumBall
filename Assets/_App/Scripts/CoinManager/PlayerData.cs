@@ -1,93 +1,102 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Constant
 {
-    public static string DataKey_PlayerData = "player_data";
-    public static int countSong = 19;
-    public static int priceUnlockSong = 1000;
+	public static string DataKey_PlayerData="player_data";
+	public static int    countSong         =19;
+	public static int    priceUnlockSong   =1000;
 }
 
 public class PlayerData : BaseData
 {
-    public int intDiamond;
-    public int currentSong;
-    public bool[] listSongs;
+	public int       intDiamond;
+	public int       currentSong;
+	public bool[]    listSongs;
+	public int       skinID;
+	public List<int> skins=new List<int>() {0};
 
-    public Action<int> onChangeDiamond;
+	public Action<int> onChangeDiamond;
 
-    public override void Init()
-    {
-        prefString = Constant.DataKey_PlayerData;
-        if (PlayerPrefs.GetString(prefString).Equals(""))
-        {
-            ResetData();
-        }
+	public override void Init()
+	{
+		prefString=Constant.DataKey_PlayerData;
+		if(PlayerPrefs.GetString(prefString).Equals(""))
+		{
+			ResetData();
+		}
 
-        base.Init();
-    }
+		base.Init();
+	}
 
+	public void SetSkinID(int skinID)
+	{
+		this.skinID=skinID;
+		GameAction.updateSkinAction?.Invoke(skinID);
+	}
 
-    public override void ResetData()
-    {
-        intDiamond = 0;
-        currentSong = 0;
-        listSongs = new bool[Constant.countSong];
+	public override void ResetData()
+	{
+		skins      =new List<int>() {0};
+		intDiamond =0;
+		currentSong=0;
+		listSongs  =new bool[Constant.countSong];
 
-        for (int i = 0; i < 8; i++)
-        {
-            listSongs[i] = true;
-        }
+		for(int i=0;i<8;i++)
+		{
+			listSongs[i]=true;
+		}
 
-        Save();
-    }
+		Save();
+	}
 
-    public bool CheckLock(int id)
-    {
-        return this.listSongs[id];
-    }
+	public bool CheckLock(int id) { return this.listSongs[id]; }
 
-    public void Unlock(int id)
-    {
-        if (!listSongs[id])
-        {
-            listSongs[id] = true;
-        }
+	public void Unlock(int id)
+	{
+		if(!listSongs[id])
+		{
+			listSongs[id]=true;
+		}
 
-        Save();
-    }
+		Save();
+	}
 
-    public void AddDiamond(int a)
-    {
-        intDiamond += a;
+	public void AddDiamond(int a)
+	{
+		intDiamond+=a;
 
-        onChangeDiamond?.Invoke(intDiamond);
-        
-        Save();
-    }
+		onChangeDiamond?.Invoke(intDiamond);
 
-    public bool CheckCanUnlock()
-    {
-        return intDiamond >= Constant.priceUnlockSong;
-    }
+		Save();
+	}
 
-    public void SubDiamond(int a)
-    {
-        intDiamond -= a;
+	public bool CheckCanUnlock() { return intDiamond>=Constant.priceUnlockSong; }
 
-        if (intDiamond < 0)
-        {
-            intDiamond = 0;
-        }
+	public void SubDiamond(int a)
+	{
+		intDiamond-=a;
 
-        onChangeDiamond?.Invoke(intDiamond);
-        
-        Save();
-    }
+		if(intDiamond<0)
+		{
+			intDiamond=0;
+		}
 
-    public void ChooseSong(int i)
-    {
-        currentSong = i;
-        Save();
-    }
+		onChangeDiamond?.Invoke(intDiamond);
+
+		Save();
+	}
+
+	public void ChooseSong(int i)
+	{
+		currentSong=i;
+		Save();
+	}
+
+	public void AddSkin(int i)
+	{
+		skins.Add(i);
+		Save();
+	}
 }
